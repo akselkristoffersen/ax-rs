@@ -26,7 +26,7 @@ impl<'a, T, F> Iterator for PacketIterator<'a, T, F> where
         }
         self.slice = &self.slice[self.size..];
         self.size = (self.func)(self.slice);
-        if self.slice.is_empty() || self.size == 0 || self.size > self.slice.len() {
+        if self.size == 0 || self.size > self.slice.len() {
             return None
         }
         Some(&self.slice[0..self.size])
