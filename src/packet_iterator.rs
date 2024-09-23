@@ -26,9 +26,9 @@ impl<'a, T, F> Iterator for PacketIterator<'a, T, F> where
         if next_packet_size == 0 || next_packet_size > self.buffer.len() {
             return None
         }
-        let temp = &self.buffer[0..next_packet_size];
+        let next_packet = &self.buffer[0..next_packet_size];
         self.buffer = &self.buffer[next_packet_size..];
-        Some(temp)
+        Some(next_packet)
     }
 }
 
