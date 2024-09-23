@@ -1,7 +1,7 @@
 pub struct PacketIterator<'a, T, F> where 
     F: Fn(&[T]) -> usize {
-    slice: &'a [T],
-    func: F,
+    buffer: &'a [T],
+    get_size_func: F,
     size: usize,
 }
 
@@ -9,8 +9,8 @@ impl<'a, T, F> PacketIterator<'a, T, F> where
     F: Fn(&[T]) -> usize {
     pub fn new(buffer: &'a [T], protocol: F) -> PacketIterator<T, F> {
         PacketIterator{
-            slice: &buffer,
-            func: protocol,
+            buffer: buffer,
+            get_size_func: protocol,
             size: 0,
         }
     }
@@ -21,15 +21,15 @@ impl<'a, T, F> Iterator for PacketIterator<'a, T, F> where
     type Item = &'a [T];
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.size >= self.slice.len() {
+        if self.size >= self.buffer.len() {
             return None
         }
-        self.slice = &self.slice[self.size..];
-        self.size = (self.func)(self.slice);
-        if self.size == 0 || self.size > self.slice.len() {
+        self.buffer = &self.buffer[self.size..];
+        self.size = (self.get_size_func)(self.buffer);
+        if self.size == 0 || self.size > self.buffer.len() {
             return None
         }
-        Some(&self.slice[0..self.size])
+        Some(&self.buffer[0..self.size])
     }
 }
 
