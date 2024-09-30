@@ -63,7 +63,7 @@ mod tests {
     }
 
     #[test]
-    fn complete_packets_with_lambda() {
+    fn complete_packets_with_closure() {
         let protocol = |buf: &[i32]| -> usize {
             protocol(buf)
         };
